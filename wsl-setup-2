@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+# omz
+export ZSH=/usr/share/oh-my-zsh
+export ZSH_CUSTOM=$ZSH/custom
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# autosuggesions plugin
+git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
+
+# zsh-syntax-highlighting plugin
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+
+# zsh-fast-syntax-highlighting plugin
+git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+
+# zsh-autocomplete plugin
+git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
+
+# powerlevel 10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# activer les plugins et thème
+sed -i -E 's/^ZSH_THEME.*?$/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' .zshrc
+sed -i -E 's/plugins=.*?$/plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)/g' .zshrc
+echo "alias ls='"$(which eza)" --icons'" >> ~/.zshrc
+
+# Meslo hacked nerd font
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Meslo.zip
+rm -rf /mnt/c/Temp/meslo-font
+mkdir -p /mnt/c/Temp/meslo-font
+unzip Meslo.zip MesloLGSNerdFont-Bold.ttf MesloLGSNerdFont-BoldItalic.ttf MesloLGSNerdFont-Italic.ttf MesloLGSNerdFont-Regular.ttf -d /mnt/c/Temp/meslo-font
+rm Meslo.zip
+/mnt/c/Windows/explorer.exe 'C:\Temp\meslo-font'
+
+# configs
+export tmpUser=$(cat /tmp/user.tmp)
+cp ~/.p10k.zsh /etc/skel/
+cp ~/.zshrc /etc/skel/
+cp ~/.p10k.zsh ~$tmpUser/
+cp ~/.zshrc ~$tmpUser/
+chown $tmpUser:$tmpUser ~$tmpUser/.zshrc
+chown $tmpUser:$tmpUser ~t,Ûser/.p10k.zsh
+
+echo
+echo
+echo "To reconfigure zsh:"
+echo "  autoload -Uz zsh-newuser-install"
+echo "  zsh-newuser-install -f"
