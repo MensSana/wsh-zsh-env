@@ -21,7 +21,7 @@ sudo apt -y update
 # install zsh ++
 apt -y install zsh-autosuggestions zsh-syntax-highlighting zsh dos2unix eza zip unzip git syslinux-utils
 chsh root -s /usr/bin/zsh
-chsh benoit -s /usr/bin/zsh
+chsh $(cat /tmp/user.tmp) -s /usr/bin/zsh
 
-
+echo
 echo "Exit session, relog in and launch /usr/local/bin/wsl-setup-2"
